@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">SSS2017</string>
+    <string name="c">© TKL, SOKA UNIV. 2017</string>
+    <string name="start">START</string>
+    <string name="gameover">GAME OVER</string>
+    <string name="back">Play Again</string>
+    <string name="pause">!</string>
+</resources>
