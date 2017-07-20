@@ -3,7 +3,7 @@ package jp.ac.soka.tkl.sss2017;
 /*------------------------------*
  *  MainActivity.java           *
  *  ゲームの流れ                *
- *  last update : June 15, 2017 *
+ *  last update : July 20, 2017 *
  *------------------------------*/
 
 import android.content.Intent;

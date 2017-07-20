@@ -3,7 +3,7 @@ package jp.ac.soka.tkl.sss2017;
 /*------------------------------*
  *  GameActivity.java           *
  *  ゲームの制御                *
- *  last update : June 22, 2017 *
+ *  last update : July 20, 2017 *
  *------------------------------*/
 
 import android.content.DialogInterface;
