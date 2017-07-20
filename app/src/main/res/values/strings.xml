@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">SSS2017</string>
+    <string name="sss"><font color="#FF0000">S</font>cience<font color="#FF0000"> \nS</font>ummer<font color="#FF0000"> \nS</font>chool</string>
+    <string name="android">Android Programming</string>
     <string name="c">© TKL, SOKA UNIV. 2017</string>
     <string name="start">START</string>
     <string name="gameover">GAME OVER</string>
