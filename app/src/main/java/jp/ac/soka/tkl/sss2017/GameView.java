@@ -27,6 +27,7 @@ public class GameView extends View {
     private Bitmap character = null;
     private Bitmap background = null;
     private Bitmap ground = null;
+    private int x;
     private int c_w;
     private int c_h;
     private int c_y;
@@ -39,6 +40,10 @@ public class GameView extends View {
     private boolean jump = false;
     private Timer timer1;
     private final Handler handler = new Handler();
+    private Obstacles obstacle1 = null;
+    private Obstacles obstacle2 = null;
+    private Obstacles obstacle3 = null;
+    private int appear = 0;
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -54,22 +59,26 @@ public class GameView extends View {
         Point size = new Point();
         dp.getSize(size);
 
-        c_w = size.y/5;
-        c_h = size.y/5;
-        bg_w = size.x * 2;
-        int bg_h = size.y/10 * 7;
-        int g_h = size.y/10 *3;
+        x = size.x;
+        int y = size.y;
 
-        c_y = size.y/2;
+        c_w = y /5;
+        c_h = y /5;
+        bg_w = x * 2;
+        int bg_h = y /10 * 7;
+        int g_h = y /10 * 3;
+
+        c_y = y /2;
         bg_x = 0;
         g_x = 0;
-        g_y = size.y/10 * 7;
+        g_y = y /10 * 7;
 
         max = c_y - 250;
 
         character = Bitmap.createScaledBitmap(character, c_w, c_h, true);
         background = Bitmap.createScaledBitmap(background, bg_w, bg_h, true);
         ground = Bitmap.createScaledBitmap(ground, bg_w, g_h, true);
+
     }
 
     public void showCanvas(boolean flg){
@@ -115,6 +124,36 @@ public class GameView extends View {
                             bg_x -= 5;
                             if(bg_x + bg_w < 0) bg_x = 0;
 
+                            if((obstacle1 == null || obstacle2 == null || obstacle3 == null) && appear == 0 && RandomGenerator.rand(15) == 0){
+                                if(obstacle1 == null) {
+                                    obstacle1 = new Obstacles(getContext());
+                                    obstacle1.posX = x;
+                                    if(RandomGenerator.rand(3) == 0) obstacle1.posY = g_y - obstacle1.h*3/2;
+                                    else obstacle1.posY = g_y - obstacle1.h/2;
+                                    appear = 30;
+                                }
+                                else if(obstacle2 == null) {
+                                    obstacle2 = new Obstacles(getContext());
+                                    obstacle2.posX = x;
+                                    if(RandomGenerator.rand(3) == 0) obstacle2.posY = g_y - obstacle2.h*3/2;
+                                    else obstacle2.posY = g_y - obstacle2.h/2;
+                                    appear = 30;
+                                }
+                                else if(obstacle3 == null) {
+                                    obstacle3 = new Obstacles(getContext());
+                                    obstacle3.posX = x;
+                                    if(RandomGenerator.rand(3) == 0) obstacle3.posY = g_y - obstacle3.h*3/2;
+                                    else obstacle3.posY = g_y - obstacle3.h/2;
+                                    appear = 30;
+                                }
+                            }
+
+                            if(obstacle1 != null && obstacle1.end) obstacle1 = null;
+                            if(obstacle2 != null && obstacle2.end) obstacle2 = null;
+                            if(obstacle3 != null && obstacle3.end) obstacle3 = null;
+
+                            if(appear > 0) appear--;
+
                             invalidate();
                         }
                     });
@@ -141,12 +180,16 @@ public class GameView extends View {
 
     @Override
     protected void onDraw(final Canvas canvas) {
+
         if(viewflg){
             canvas.drawBitmap(background, bg_x, 0, paint);
             canvas.drawBitmap(background, bg_x + bg_w, 0, paint);
             canvas.drawBitmap(ground, g_x, g_y, paint);
             canvas.drawBitmap(ground, g_x + bg_w, g_y, paint);
             canvas.drawBitmap(character, 100, c_y, paint);
+            if(obstacle1 != null )canvas.drawBitmap(obstacle1.shape,obstacle1.posX,obstacle1.posY,paint);
+            if(obstacle2 != null )canvas.drawBitmap(obstacle2.shape,obstacle2.posX,obstacle2.posY,paint);
+            if(obstacle3 != null )canvas.drawBitmap(obstacle3.shape,obstacle3.posX,obstacle3.posY,paint);
         }
 
     }
