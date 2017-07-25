@@ -13,3 +13,5 @@ LINK
 [picture](/app/src/main/res/drawable/)
 
 [string](/app/src/main/res/values/strings.xml)
+
+<img src="./img/Screenshot_1500980000.png" width=450 />
