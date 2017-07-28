@@ -3,7 +3,7 @@ package jp.ac.soka.tkl.sss2017;
 /*------------------------------*
  *  GameView.java           *
  *  ゲームの描画                *
- *  last update : June 22, 2017 *
+ *  last update : June 28, 2017 *
  *------------------------------*/
 
 import android.content.Context;
@@ -14,6 +14,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -187,9 +188,19 @@ public class GameView extends View {
             canvas.drawBitmap(ground, g_x, g_y, paint);
             canvas.drawBitmap(ground, g_x + bg_w, g_y, paint);
             canvas.drawBitmap(character, 100, c_y, paint);
-            if(obstacle1 != null )canvas.drawBitmap(obstacle1.shape,obstacle1.posX,obstacle1.posY,paint);
-            if(obstacle2 != null )canvas.drawBitmap(obstacle2.shape,obstacle2.posX,obstacle2.posY,paint);
-            if(obstacle3 != null )canvas.drawBitmap(obstacle3.shape,obstacle3.posX,obstacle3.posY,paint);
+            if(obstacle1 != null ){
+                canvas.drawBitmap(obstacle1.shape,obstacle1.posX,obstacle1.posY,paint);
+                if(obstacle1.isColliding(c_w, c_h, 100, c_y)) {Log.d("d",Integer.toString(obstacle1.h)+" "+Integer.toString(c_h));}
+            }
+            if(obstacle2 != null ){
+                canvas.drawBitmap(obstacle2.shape,obstacle2.posX,obstacle2.posY,paint);
+                if(obstacle2.isColliding(c_w, c_h, 100, c_y)) {Log.d("d",Integer.toString(obstacle2.h)+" "+Integer.toString(c_h));}
+            }
+            if(obstacle3 != null ){
+                canvas.drawBitmap(obstacle3.shape,obstacle3.posX,obstacle3.posY,paint);
+                if(obstacle3.isColliding(c_w, c_h, 100, c_y)) {Log.d("d",Integer.toString(obstacle3.h)+" "+Integer.toString(c_h));}
+            }
+
         }
 
     }
