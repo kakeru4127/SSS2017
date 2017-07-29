@@ -3,7 +3,7 @@ package jp.ac.soka.tkl.sss2017;
 /*------------------------------*
  *  GameView.java           *
  *  ゲームの描画                *
- *  last update : June 28, 2017 *
+ *  last update : June 29, 2017 *
  *------------------------------*/
 
 import android.content.Context;
@@ -45,6 +45,11 @@ public class GameView extends View {
     private Obstacles obstacle2 = null;
     private Obstacles obstacle3 = null;
     private int appear = 0;
+    
+    //private Obstacles[] obstacles = null;
+    //private final int obsSize = 3;
+    private int collision = 0;
+    private final int invincibleTime = 20;
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -79,6 +84,7 @@ public class GameView extends View {
         character = Bitmap.createScaledBitmap(character, c_w, c_h, true);
         background = Bitmap.createScaledBitmap(background, bg_w, bg_h, true);
         ground = Bitmap.createScaledBitmap(ground, bg_w, g_h, true);
+        //obstacles = new Obstacles[obsSize];
 
     }
 
@@ -120,6 +126,8 @@ public class GameView extends View {
                                 c_n = 1;
                             } else if (!GameActivity.jumpflg) c_n = 1;
 
+                            if(collision != 0) collision--;
+
                             g_x -= 20;
                             if(g_x + bg_w < 0) g_x = 0;
                             bg_x -= 5;
@@ -148,10 +156,28 @@ public class GameView extends View {
                                     appear = 30;
                                 }
                             }
-
+                            /*
+                            if(appear==0&&RandomGenerator.rand(15)==0){
+                                for(int i = 0; i<obsSize; i++){
+                                    if(obstacles[i]==null){
+                                        obstacles[i] = new Obstacles(getContext());
+                                        obstacles[i].posX = x;
+                                        if(RandomGenerator.rand(3) == 0) obstacles[i].posY = g_y - obstacles[i].h*3/2;
+                                        else obstacles[i].posY = g_y - obstacles[i].h/2;
+                                        appear = 30;
+                                    }
+                                }
+                            }
+                            */
                             if(obstacle1 != null && obstacle1.end) obstacle1 = null;
                             if(obstacle2 != null && obstacle2.end) obstacle2 = null;
                             if(obstacle3 != null && obstacle3.end) obstacle3 = null;
+                            checkCollision();
+                            /*
+                            for(int i = 0; i<obsSize; i++){
+                                if(obstacles[i] != null && obstacles[i].end) obstacles[i] = null;
+                            }
+                            */
 
                             if(appear > 0) appear--;
 
@@ -187,21 +213,39 @@ public class GameView extends View {
             canvas.drawBitmap(background, bg_x + bg_w, 0, paint);
             canvas.drawBitmap(ground, g_x, g_y, paint);
             canvas.drawBitmap(ground, g_x + bg_w, g_y, paint);
-            canvas.drawBitmap(character, 100, c_y, paint);
-            if(obstacle1 != null ){
-                canvas.drawBitmap(obstacle1.shape,obstacle1.posX,obstacle1.posY,paint);
-                if(obstacle1.isColliding(c_w, c_h, 100, c_y)) {Log.d("d",Integer.toString(obstacle1.h)+" "+Integer.toString(c_h));}
-            }
-            if(obstacle2 != null ){
-                canvas.drawBitmap(obstacle2.shape,obstacle2.posX,obstacle2.posY,paint);
-                if(obstacle2.isColliding(c_w, c_h, 100, c_y)) {Log.d("d",Integer.toString(obstacle2.h)+" "+Integer.toString(c_h));}
-            }
-            if(obstacle3 != null ){
-                canvas.drawBitmap(obstacle3.shape,obstacle3.posX,obstacle3.posY,paint);
-                if(obstacle3.isColliding(c_w, c_h, 100, c_y)) {Log.d("d",Integer.toString(obstacle3.h)+" "+Integer.toString(c_h));}
-            }
+            if(collision%2==0) canvas.drawBitmap(character, 100, c_y, paint);
+            if(obstacle1 != null ) canvas.drawBitmap(obstacle1.shape,obstacle1.posX,obstacle1.posY,paint);
+            if(obstacle2 != null ) canvas.drawBitmap(obstacle2.shape,obstacle2.posX,obstacle2.posY,paint);
+            if(obstacle3 != null ) canvas.drawBitmap(obstacle3.shape,obstacle3.posX,obstacle3.posY,paint);
 
+            /*
+            for (Obstacles obs:obstacles){
+                if(obs!=null)canvas.drawBitmap(obs.shape, obs.posX, obs.posY, paint);
+            }
+            */
         }
+    }
 
+    public void checkCollision(){
+        if(collision != 0) return;
+        if( obstacle1 != null && obstacle1.isColliding(c_w, c_h, 100, c_y) ) {
+            Log.d("d",Integer.toString(obstacle1.h)+" "+Integer.toString(c_h));
+            collision = invincibleTime;
+        }
+        if( obstacle2 != null && obstacle2.isColliding(c_w, c_h, 100, c_y) ) {
+            Log.d("d",Integer.toString(obstacle2.h)+" "+Integer.toString(c_h));
+            collision = invincibleTime;
+        }
+        if( obstacle3 != null && obstacle3.isColliding(c_w, c_h, 100, c_y) ) {
+            Log.d("d",Integer.toString(obstacle3.h)+" "+Integer.toString(c_h));
+            collision = invincibleTime;
+        }
+        /*
+        for (Obstacles obs:obstacles) {
+            if( obs != null && obs.isColliding(c_w, c_h, 100, c_y) ){
+                collision = invincibleTime;
+                break;
+            }
+        }*/
     }
 }
