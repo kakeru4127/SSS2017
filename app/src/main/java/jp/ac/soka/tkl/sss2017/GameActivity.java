@@ -3,7 +3,7 @@ package jp.ac.soka.tkl.sss2017;
 /*------------------------------*
  *  GameActivity.java           *
  *  ゲームの制御                *
- *  last update : July 20, 2017 *
+ *  last update : July 29, 2017 *
  *------------------------------*/
 
 import android.content.DialogInterface;
@@ -19,6 +19,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -32,6 +33,9 @@ public class GameActivity extends AppCompatActivity {
     private GameView gv;
     static boolean jumpflg = false;
     boolean pauseflg = false;
+
+    private int life = 3;
+    private TextView lifeText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +92,10 @@ public class GameActivity extends AppCompatActivity {
         timerText = (TextView)findViewById(R.id.timer);
         timerText.setText("00:00.0");
         count = 0;
+
+        lifeText = (TextView)findViewById(R.id.life);
+        lifeText.setText(String.format(Locale.US, "LIFE : %d", life));
+
         startTimer();
     }
 
@@ -128,6 +136,16 @@ public class GameActivity extends AppCompatActivity {
                         long ss = count * 100 / 1000 % 60;
                         long ms = (count * 100 - ss * 1000 - mm * 1000 * 60) / 100;
                         timerText.setText(String.format("%1$02d:%2$02d.%3$01d", mm, ss, ms));
+
+                        if(gv.checkCollision()){
+                            lifeText.setText(String.format(Locale.US, "LIFE : %d", --life));
+                            if(life == 0) {
+                                gv.clear();
+                                MainActivity.go = true;
+                                MainActivity.time = timerText.getText().toString();
+                                finish();
+                            }
+                        }
                     }
                 });
             }

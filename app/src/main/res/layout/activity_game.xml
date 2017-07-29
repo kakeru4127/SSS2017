@@ -31,6 +31,22 @@
         android:textSize="60sp"
         android:textColor="#00f"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/life"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="8dp"
+        android:background="#88FFFFFF"
+        android:textSize="30sp"
+        android:textColor="#00F"
+        app:layout_constraintTop_toBottomOf="@+id/pause"
+        android:layout_marginLeft="0dp"
+        app:layout_constraintLeft_toLeftOf="@+id/pause"
+        app:layout_constraintRight_toRightOf="@+id/pause" />
 
 </android.support.constraint.ConstraintLayout>
