@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,9 +30,9 @@ public class GameActivity extends AppCompatActivity {
     TextView timerText;
     Timer timer;
     Handler handler = new Handler();
-    long count = 0;
+    long count;
     private GameView gv;
-    static boolean jumpflg = false;
+    //static boolean jumpflg;   //プレイを繰り返すとjumpflgの整合性がとれなくなる不具合の消極的回避
     boolean pauseflg = false;
 
     private int life = 3;
@@ -40,6 +41,7 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_game); // 画面のレイアウト設定
         View decor = this.getWindow().getDecorView();
@@ -103,8 +105,8 @@ public class GameActivity extends AppCompatActivity {
     public boolean onTouchEvent(MotionEvent event) {    // 画面をタッチしたときの動作
         if(event.getAction() == MotionEvent.ACTION_DOWN) {    // 画面に触れたとき
             if(!pauseflg) {
-                if (!jumpflg) {
-                    jumpflg = true;
+                if (!gv.isJumping()) {
+                    //jumpflg = true;
                     gv.jump();
                 }
             }
@@ -151,5 +153,4 @@ public class GameActivity extends AppCompatActivity {
             }
         }, 0, 100);
     }
-
 }

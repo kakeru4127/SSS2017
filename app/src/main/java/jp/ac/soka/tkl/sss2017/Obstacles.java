@@ -3,7 +3,7 @@ package jp.ac.soka.tkl.sss2017;
 /*------------------------------*
  *  Obstacles.java              *
  *  障害物のクラス              *
- *  last update : July 28, 2017 *
+ *  last update : July 29, 2017 *
  *------------------------------*/
 
 import android.content.Context;
@@ -21,6 +21,8 @@ class Obstacles extends View{
     boolean end = false;
     Timer timer;
     Handler handler = new Handler();
+
+    private final int margin = 40;
 
     public Obstacles(Context context) {
         super(context);
@@ -53,8 +55,8 @@ class Obstacles extends View{
     }
 
     public boolean isColliding( int c_w, int c_h, int c_x, int c_y ){
-        if( c_x + c_w > posX && posX + w/2 > c_x ) {
-            if ( c_y + c_h > posY && posY + h/2 > c_y ) {
+        if( c_x + c_w > posX + margin && posX + w/2 > c_x + margin ) {
+            if ( c_y + c_h > posY + margin && posY + h/2 > c_y + margin ) {
                 return true;
             }
         }

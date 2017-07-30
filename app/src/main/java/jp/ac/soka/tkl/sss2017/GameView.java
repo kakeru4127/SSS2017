@@ -14,6 +14,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -51,6 +52,9 @@ public class GameView extends View {
     private final int invincibleTime = 20;
     private int appearPeriod = 30;
     private final int c_x = 100;
+    private final int acc = 5;
+    private final int ini_v = 50;
+    private int v;
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -102,16 +106,12 @@ public class GameView extends View {
                 public void run() {
                     handler.post(new Runnable() {
                         public void run() {
-                            if(GameActivity.jumpflg){
-                                if(!jump) {
-                                    c_y -= 25;
-                                    if(c_y == max) jump = true;
-                                } else {
-                                    c_y += 25;
-                                    if(c_y == max + 250) {
-                                        jump = false;
-                                        GameActivity.jumpflg = false;
-                                    }
+                            if(jump){
+                                c_y -= v;
+                                v-=acc;
+                                if(c_y > max + 250){
+                                    jump = false;
+                                    c_y = max + 250;
                                 }
                             }else if (c_n == 1) {
                                 c_n = 2;
@@ -125,7 +125,7 @@ public class GameView extends View {
                                 character = Bitmap.createScaledBitmap(character, c_w, c_h, true);
                             } else if (c_n == 4) {
                                 c_n = 1;
-                            } else if (!GameActivity.jumpflg) c_n = 1;
+                            }// else if (!GameActivity.jumpflg) c_n = 1;
 
                             if(collision != 0) collision--;
 
@@ -133,7 +133,7 @@ public class GameView extends View {
                             if(g_x + bg_w < 0) g_x = 0;
                             bg_x -= 5;
                             if(bg_x + bg_w < 0) bg_x = 0;
-                            //*
+                            /*
                             if((obstacle1 == null || obstacle2 == null || obstacle3 == null) && appear == 0 && RandomGenerator.rand(15) == 0){
                                 if(obstacle1 == null) {
                                     obstacle1 = new Obstacles(getContext());
@@ -181,7 +181,6 @@ public class GameView extends View {
                             //*/
 
                             if(appear > 0) appear--;
-
                             invalidate();
                         }
                     });
@@ -194,10 +193,15 @@ public class GameView extends View {
         }
     }
 
+    public boolean isJumping(){
+        return jump;
+    }
     public void jump() {
         c_n = 3;
         character = BitmapFactory.decodeResource(getResources(), R.drawable.c3);
         character = Bitmap.createScaledBitmap(character, c_w, c_h, true);
+        jump = true;
+        v = ini_v;
         invalidate();
     }
 
@@ -215,7 +219,7 @@ public class GameView extends View {
             canvas.drawBitmap(ground, g_x, g_y, paint);
             canvas.drawBitmap(ground, g_x + bg_w, g_y, paint);
             if(collision%2==0) canvas.drawBitmap(character, 100, c_y, paint);
-            //*
+            /*
             if(obstacle1 != null ) canvas.drawBitmap(obstacle1.shape,obstacle1.posX,obstacle1.posY,paint);
             if(obstacle2 != null ) canvas.drawBitmap(obstacle2.shape,obstacle2.posX,obstacle2.posY,paint);
             if(obstacle3 != null ) canvas.drawBitmap(obstacle3.shape,obstacle3.posX,obstacle3.posY,paint);
@@ -224,12 +228,14 @@ public class GameView extends View {
                 if(obs!=null)canvas.drawBitmap(obs.shape, obs.posX, obs.posY, paint);
             }
             //*/
+
         }
     }
 
     public boolean checkCollision(){
+
         if( collision != 0 ) return false;
-        //*
+        /*
         if( obstacle1 != null && obstacle1.isColliding(c_w, c_h, 100, c_y) ) {
             collision = invincibleTime;
             return true;
